@@ -1,0 +1,42 @@
+#AGRADEÇO AO PROFESSOR DO CANAL DesCOMPlica, Oliba! PELOS ENSINAMENTOS :D
+#PONTOS FLUTUANTES
+
+#EXISTEM DOIS TIPOS DE PONTOS FLUTUANTES:
+#Float: precisa de 1 coprocessador
+#Double: precisa de 2 copressadores
+
+#Para imprimir float, usa li $v0, 2
+
+#PARA IMPRIMIR FLOATS:
+#	PI: .float 3.141592
+#	li $v0, 2 #A INSTRUÇÃO li $v0 JUNTO COM O NÚMERO 2 SIGNIFICA QUE UM FLOAT SERÁ IMPRESSO
+#	lwc1 $f12, PI #SEMPRE DEVEMOS COLOCAR O VALOR DO FLOAT EM $f12, OU O VALOR CORRETO NÃO SERÁ IMPRESSO
+#	syscall
+#	
+#	#PARA LER FLOATS:
+#	li $v0, 6 #A INSTRUÇÃO li $v0 JUNTO COM O NÚMERO 6 SIGNIFICA QUE SERÁ LIDO UM VALOR FLOAT
+#	syscall
+#	
+#	#O VALOR LIDO COMO FLOT VAI PARA $f0
+
+.data
+	msg: .asciiz "Forneça um número decimal: "
+	zero: .float 0.0 #VOU PRECISAR DESSA CONSTANTE ZERO MAIS NA FRENTE
+
+.text
+	#IMPRIMINDO A MENSAGEM PARA O USUÁRIO:
+	li $v0, 4
+	la $a0, msg
+	syscall	
+	
+	#LENDO O NÚMERO
+	li $v0, 6
+	syscall #VALOR LIDO ESTARÁ $f0
+	
+	lwc1 $f1, zero #PASSANDO A VARIÁVEL zero PARA O REGISTRADOR $f1
+	
+	#PARA ATRIBUIR UM VALOR DE REGISTRADOR PONTO FLUTUANTE PARA OUTRO REGISTRADOR PONTO FLUTUANTE:
+	add.s $f12, $f1, $f0
+	
+	li $v0, 2
+	syscall
