@@ -1,0 +1,47 @@
+#ARRAYS
+#Aula do canal DesCOMPlica, Oliba!
+
+#Precisamos alocar espaço antes de definir o array
+
+.data
+
+	meuArray:
+		.align 2 #O ALINHAMENTO PARA ARRAYS DE INTEIRO É 2. O NÚMERO MUDA DEPENDENDO DO TIPO DE DADOS.
+		.space 16 #CADA INTEIRO OCUPA 4 BYTES, EU QUERO UM ARRAY DE 4 POSIÇÕES, 4 x 4 = 16. OU SEJA, O ESPAÇO DO MEU ARRAY É 16.
+
+.text
+	
+	move $t0,$zero #O ÍNDICE DO MEU ARRAY SERÁ $t0. INICIALIZO ELE COM 0.
+	#O ÍNDICE PRECISA SER ATUALIZADO DE 4 EM 4 PARA ANDAR NAS POSIÇÕES.
+	
+	move $t1, $zero #VALOR A SER COLOCADO NO ARRAY
+	
+	li $t2, 16 #TAMANHO DO ARRAY
+	
+	loop: #VOU CRIAR UM LOOP QUE VAI PERCORRER O ARRAY, PARANDO NO 16, QUE É O TAMANHO DELE.
+	
+		beq $t0, $t2, saiDoLoop #SAI DO LOOP QUANDO FOR 16
+		sw $t1, meuArray($t0) #GUARDO O VALOR DE $t1 NA POSIÇÃO ATUAL ($t0).
+		
+		addi $t0, $t0, 4 #SOMO 4 NO ÍNDICE ($t0) PARA IR PARA A PRÓXIMA POSIÇÃO.
+		
+		addi $t1, $t1, 1 #SOMO 1 PARA O PRÓXIMO VALOR QUE SERÁ ADICIONADO.
+		
+		j loop
+		
+	saiDoLoop:
+	
+	move $t0, $zero #O VALOR DE $t0 SAI 16 DO loop, ENTÃO COLOCO ZERO NELE DE NOVO.
+	
+		imprime: #VOU CRIAR OUTRO LOOP PARA IMPRIMIR OS VALORES DO ARRAY
+			beq $t0, $t2, saiDaImpressao #SE O VALOR FOR IGUAL A 16, SAI DA IMPRESSÃO
+			li $v0, 1 #INTRUÇÃO PARA IMPRIMIR INTEIRO
+			lw $a0, meuArray($t0) #GUARDA O VALOR NA POSIÇÃO $t0 NO REGISTRADOR $a0 PARA SER IMPRESSO.
+			syscall
+			
+			addi $t0, $t0, 4 #ADICIONA 4 NO ÍNDICE ($t0) PARA AVANÇAR NA POSIÇÃO DO ARRAY QUE, LEMBRANDO, É DE 4 EM 4 NO NOSSO CASO, QUE É UM ARRAY DE INTEIROS.
+			j imprime
+		
+		saiDaImpressao:
+			li $v0, 10 #ENCERRA O PROGRAMA
+			syscall
